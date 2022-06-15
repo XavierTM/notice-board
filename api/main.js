@@ -27,8 +27,10 @@ function getNotice(req, res) {
 const app = express();
 
 // middlewares
+app.use(express.static('static'));
 app.use(morgan('dev'));
 app.use(express.json());
+
 
 
 // routes
