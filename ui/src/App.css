@@ -1,0 +1,14 @@
+.center-align {
+  text-align: center;
+}
+
+.full-screen {
+  height: var(--window-height);
+  width: var(--window-width);
+}
+
+.vhalign, .vh-align {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
