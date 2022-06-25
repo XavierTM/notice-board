@@ -12,14 +12,22 @@ function postMessage(req, res) {
    if (!req.body.notice)
       res.status(400).send('Notice is required.');
 
-   notice = req.body.notice;
+   notices.push(req.body.notice.substring(0, 24));
+   notices.shift();
 
    res.send();
 
 }
 
-function getNotice(req, res) {
-   res.send(notice);
+function getNotices(req, res) {
+   res.send(notices);
+}
+
+
+function clearNotices(req, res) {
+   notices.length = 0;
+   notices.push('', '', '', '');
+   res.send();
 }
 
 
@@ -34,8 +42,9 @@ app.use(express.json());
 
 
 // routes
-app.post('/api/notice', postMessage);
-app.get('/api/notice', getNotice);
+app.post('/api/notices', postMessage);
+app.get('/api/notices', getNotices);
+app.delete('/api/notices', clearNotices);
 
 
 // start server
@@ -46,4 +55,4 @@ app.listen(PORT, function() {
 })
 
 
-let notice = '';
+const notices = ['', '', '', ''];

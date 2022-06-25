@@ -1,7 +1,15 @@
 import { css } from "@emotion/css";
-import { Button, Grid, TextField } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import Component from "@xavisoft/react-component";
 import axios from 'axios';
+
+
+
+function getErrorStatus(err) {
+   if (err && err.response && err.response.status)
+      return parseInt(err.response.status);
+   return -1;
+}
 
 
 const divCenteredStyled = css({
@@ -30,8 +38,28 @@ class Dashboard extends Component {
       }
 
       try {
-         await axios.post('/api/notice', { notice });
+         await axios.post('/api/notices', { notice });
+         txtNotice.value = '';
          alert('Message posted.');
+      } catch (err) {
+
+         console.log(err);
+         
+         const status = getErrorStatus(err);
+
+         if (status === 0)
+            alert('No internet connection.')
+         else
+            alert(String(err));
+      }
+   }
+
+
+   clear = async () => {
+
+      try {
+         await axios.delete('/api/notices');
+         alert('Noticeboard cleared');
       } catch (err) {
          alert(String(err));
       }
@@ -54,7 +82,7 @@ class Dashboard extends Component {
                className="form-control"
                style={{
                   display: 'grid',
-                  gridTemplateColumns: '50% 50%',
+                  gridTemplateColumns: '1fr 1fr 1fr',
                   gridColumnGap: 10
                }}
             >
@@ -75,6 +103,16 @@ class Dashboard extends Component {
                      fullWidth
                   >
                      POST
+                  </Button>
+               </div>
+
+               <div>
+                  <Button
+                     variant="outlined"
+                     onClick={this.clear}
+                     fullWidth
+                  >
+                     CLEAR
                   </Button>
                </div>
             </div>
